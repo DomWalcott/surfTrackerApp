@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<!DOCTYPE html>
+<html lang="eng-gb">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surf Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="enter city name" spellcheck="false">
+            <button>
+                <img src="resources\images\searchIcon.png" alt="search button">
+            </button>
+        </div>
+        <div class="error">
+            <p>Invalid city name</p>
+        </div>
+        <div class="weather">
+
+            <h1 class="temp">22</h1>
+            <h2 class="city">Bracknell</h2>
+        </div>
+    </div>
+    <script>
+        const apiKey = "8369c0f2256a607468f9a9980226a04e";
+        const apiURL = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");
+
+        async function checkWeather(city) {
+            const response = await fetch(apiURL + city + `&appid=${apiKey}`);
+
+            if (response.status == 404) {
+                document.querySelector(".error").style.display = "block";
+                document.querySelector(".weather").style.display = "none";
+            }
+            else {
+                var data = await response.json();
+
+                console.log(data)
+                document.querySelector(".city").innerHTML = data.name;
+                document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°c";
+
+                document.querySelector(".weather").style.display = "block";
+                document.querySelector(".error").style.display = "none";
+            }
+
+
+        }
+
+        searchBtn.addEventListener("click", () => { checkWeather(searchBox.value); })
+
+    </script>
+</body>
+</html>
